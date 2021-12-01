@@ -1,0 +1,16 @@
+#!/bin/python
+
+import spotipy
+import subprocess
+import os
+import sys
+from spotipy.oauth2 import SpotifyClientCredentials
+
+sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=os.getenv('SPOTIFY_CLIENTID'),
+                                                           client_secret=os.getenv('SPOTIFY_CLIENTSECRET')))
+
+results = sp.search(q=sys.argv[1], limit=1, type='track')
+uri = results['tracks']['items'][0]['uri']
+subprocess.run(['/usr/bin/playerctl', 'open', uri])
+
+

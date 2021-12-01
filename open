@@ -1,0 +1,46 @@
+#!/bin/sh
+
+string=
+while getopts s: name
+do
+    case $name in
+    s)    string="$OPTARG"
+					;;
+    esac
+done
+shift $(($OPTIND - 1))
+if [ -z "$string" ]; then
+	string=$1
+fi
+cmd="$*"
+
+con_id=""
+wmcmd="swaymsg"
+get_id()
+{
+  con_id="$($wmcmd -t get_tree | jq '
+    first(recurse((.nodes + .floating_nodes)[]) |
+    select(any(
+    .window_properties.class,
+    .window_properties.instance,
+    .window_properties.window_role,
+    .window_properties.title,
+    .name,
+		.title,
+    .app_id;
+    values and match("'"${string}"'"; "i")
+    )).id)')"
+}
+
+get_id
+if [ -n "${con_id:-}" ]
+then 
+	$wmcmd "[con_id=${con_id%% }]" focus
+else 
+  $cmd &
+  while [ -z "${con_id:-}" ]; do 
+		get_id
+	done
+	$wmcmd "[con_id=${con_id%% }]" focus
+fi
+killall open

@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+# mode can be:
+# prtsc = do full screenshot of current screen, save to folder
+# ctrl+prtsc = area-grab, to clipboard
+# ctrl+shift+prtscr = area-grab, save
+# win+prtsc = all screens, save
+
+mode=$1
+save_folder=$2
+img_path=${save_folder}/$(date +"%b_%d_%H-%M-%S").png
+maim_command="maim --hidecursor"
+notify_cmd="notify-send -a scrn_ctl -i applets-screenshooter"
+
+current_screen() {
+    # original author: naelstrof
+    # https://gist.github.com/naelstrof/f9b74b5221cdc324c0911c89a47b8d97
+    MONITORS=$(xrandr | grep -o '[0-9]*x[0-9]*[+-][0-9]*[+-][0-9]*')
+    # Get the location of the mouse
+    XMOUSE=$(xdotool getmouselocation | awk -F "[: ]" '{print $2}')
+    YMOUSE=$(xdotool getmouselocation | awk -F "[: ]" '{print $4}')
+
+    for mon in ${MONITORS}; do
+        # Parse the geometry of the monitor
+        MONW=$(echo "${mon}" | awk -F "[x+]" '{print $1}')
+        MONH=$(echo "${mon}" | awk -F "[x+]" '{print $2}')
+        MONX=$(echo "${mon}" | awk -F "[x+]" '{print $3}')
+        MONY=$(echo "${mon}" | awk -F "[x+]" '{print $4}')
+        # Use a simple collision check
+        if [ $((XMOUSE)) -ge $((MONX)) ]; then
+            if [ $(( XMOUSE )) -le $((MONX+MONW)) ]; then
+                if [ $((YMOUSE)) -ge $((MONY)) ]; then
+                    if [ $((YMOUSE)) -le $((MONY+MONH)) ]; then
+                        # We have found our monitor!
+                        ${maim_command} -g "${MONW}x${MONH}+${MONX}+${MONY}"| xclip -selection clipboard -t image/png
+                        ${notify_cmd} "OK" "Current monitor saved to clipboard"
+                        exit 0
+                    fi
+                fi
+            fi
+        fi
+    done
+}
+
+area_c() {
+    ${maim_command} --select | xclip -selection clipboard -t image/png
+    ${notify_cmd} "Area saved to clipboard"
+}
+
+area_s() {
+    ${maim_command} --select > "${img_path}"
+    printf "%s" "${img_path}" | xclip -selection clipboard
+    ${notify_cmd} "Area saved to location\n${save_folder}\nThe file path is in the clipboard"
+}
+
+all_screens() {
+    ${maim_command} > "${img_path}"
+    ${notify_cmd} "All screens image saved to location ${save_folder}"
+}
+
+case "$mode" in
+    "current_screen") current_screen ;;
+    "area_c") area_c ;;
+    "area_s") area_s ;;
+    "all_screens") all_screens ;;
+    *) echo "please select a mode"; exit;;
+esac
+
+exit 1

@@ -1,0 +1,120 @@
+#!/bin/sh
+
+### Color outputs
+red=`tput setaf 1`
+green=`tput setaf 2`
+bold=`tput bold`
+white=`tput setaf 7`
+reset=`tput sgr0`
+
+### Shared kernel parameters
+global_params='cryptdevice=UUID=16fda021-68c8-45bd-b408-191ac6dfddb4:cryptroot root=/dev/mapper/cryptroot nowatchdog acpi_backlight=vendor random.trust_cpu=on vm.dirty_writeback_centisecs=6000 kernel.nmi_watchdog=0 vm.laptop_mode=5 vm.swappiness=1 mitigations=off module_blacklist=iTCO_wdt,kvm'
+disk_dev="/dev/nvme0n1"
+boot_partition="1"
+boot_zen_first="true"
+
+###
+boot_num=""
+package=""
+label=""
+kernel=""
+initramfs=""
+params=""
+
+### 
+gen_linux_conf(){
+	package='linux'
+	label='Arch Linux Vanilla'
+	kernel='/vmlinuz-linux'
+	initramfs='\initramfs-linux.img'
+	params="$global_params initrd=$initramfs"
+}
+
+gen_linux_zen_conf(){
+	package='linux-zen'
+	label='Arch Linux Zen'
+	kernel='/vmlinuz-linux-zen'
+	initramfs='\initramfs-linux-zen.img'
+	params="$global_params initrd=$initramfs"
+}
+
+gen_linux_custom_conf(){
+	package='linux-custom'
+	label='Arch Linux Custom'
+	kernel='/vmlinuz-linux-custom'
+	initramfs='\initramfs-linux-custom.img'
+	params="$global_params initrd=$initramfs"
+}
+
+get_boot_num(){
+	boot_num=$(efibootmgr | grep "$1" | cut -c 5-8 | xargs)
+}
+
+print_gen_entry(){
+	echo "${green}CREATE-EFISTUB ${bold}${white}$package${reset}"
+}
+
+print_del_entry(){
+	echo "${red}DELETE-EFISTUB ${bold}${white}$package${reset}"
+}
+
+gen_efi_entry(){
+	get_boot_num "$label"
+	if pacman -Q "$package" > /dev/null 2>&1; then
+		if [ -z "$boot_num" ]; then
+			sudo efibootmgr --disk "$disk_dev" --part "$boot_partition" --create --label "$label" --loader "$kernel" --unicode "$params" > /dev/null
+			print_gen_entry
+		fi
+	else
+		if [ ! -z "$boot_num" ]; then
+			sudo efibootmgr --bootnum "$boot_num" --delete-bootnum > /dev/null
+			print_del_entry
+		fi
+	fi
+}
+
+del_efi_entry(){
+	get_boot_num "$label"
+	if [ ! -z "$boot_num" ]; then
+		sudo efibootmgr --bootnum "$boot_num" --delete-bootnum > /dev/null
+		print_del_entry
+	fi
+}
+
+
+gen_all_entries(){
+	gen_linux_conf
+	gen_efi_entry
+	 
+	gen_linux_zen_conf
+	gen_efi_entry
+	
+	gen_linux_custom_conf
+	gen_efi_entry
+}
+
+del_all_entries(){
+	gen_linux_conf
+	del_efi_entry
+
+	gen_linux_zen_conf
+	del_efi_entry
+
+	gen_linux_custom_conf
+	del_efi_entry
+}
+
+usage() { echo "$0 Usage: [-G][-D][-R]" && grep " .)\ #" $0; exit 0; }
+[ $# -eq 0 ] && usage
+
+while getopts 'GDR :h' o; do
+  case "${o}" in
+		G) gen_all_entries ;;
+    D) del_all_entries ;;
+    R) del_all_entries && gen_all_entries ;;
+    h|*) 
+			usage 
+			exit 0
+			;;
+  esac
+done

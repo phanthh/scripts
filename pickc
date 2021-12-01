@@ -1,0 +1,2 @@
+#!/bin/sh
+colorpicker --one-shot --preview --short | tr -d '[:space:]' | xclip -selection c

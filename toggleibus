@@ -1,0 +1,6 @@
+#!/bin/sh
+
+engine=$(ibus engine)
+VN="Bamboo"
+EN="xkb:us::eng"
+[ "$engine" = "$VN" ] && ibus engine $EN || ibus engine $VN

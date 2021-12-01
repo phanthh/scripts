@@ -1,0 +1,4 @@
+#/bin/sh
+
+track=$(echo '' | $MENU_CMD -i -p 'Play track')
+$HOME/.local/bin/playtrack "$track"

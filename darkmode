@@ -1,0 +1,13 @@
+#!/bin/sh -l
+source $HOME/.zshenv
+export DISPLAY=:0
+
+sed -i "s/ChangeColors=.*/ChangeColors=true/gI" "$XDG_CONFIG_HOME/okularpartrc"
+sed -i "s/set recolor.*/set recolor true/gI" "$XDG_CONFIG_HOME/zathura/zathurarc"
+
+# reduce laptop brightness
+/usr/bin/brightnessctl s 0%
+
+# reduce external monitor brightness
+$HOME/.local/bin/exmonctl -s 0;
+

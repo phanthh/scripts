@@ -1,0 +1,2 @@
+#!/bin/sh
+sudo /usr/share/mycroft-core/start-mycroft.sh debug
