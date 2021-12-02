@@ -1,2 +1,3 @@
 #!/bin/sh
+
 systemctl start tor && proxychains $1

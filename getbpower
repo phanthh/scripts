@@ -1,6 +1,0 @@
-#/bin/sh
-
-MAC_ADDRESS="FC:58:FA:15:CB:7B"
-bluetoothctl disconnect $MAC_ADDRESS
-dunstify $(bheadset $MAC_ADDRESS)
-bluetoothctl connect $MAC_ADDRESS

@@ -12,4 +12,4 @@ sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=os.getenv('
 results = sp.search(q=sys.argv[1], limit=1, type='track')
 uri = results['tracks']['items'][0]['uri']
 print(uri)
-subprocess.run(['/usr/bin/playerctl', '-p', 'spotify',  'open', uri])
+subprocess.run(['playerctl', '-p', 'spotify',  'open', uri])

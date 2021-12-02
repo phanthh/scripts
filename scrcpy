@@ -1,3 +1,2 @@
 #!/bin/sh
-
-/usr/bin/scrcpy -S
+/usr/bin/scrcpy -S $*

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 choices="default\nlinux\nlinux-zen\nlinux-lts\nlinux-harden\nwindow\nvfio"
-chosen=$(echo $choices | $MENU_CMD -i -p "Reboot")
+chosen=$(echo $choices | menu_cmd -i -p "Reboot")
 
 case $chosen in
 	default) reboot;;

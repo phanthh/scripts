@@ -23,7 +23,6 @@ case $command in
     iwconfig $interface | grep Mode
     ;;
   password)
-
     for file in /etc/NetworkManager/system-connections/*
     do
         filename=$(basename -- "$file")

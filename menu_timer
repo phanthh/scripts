@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# menu for starting a timer.
+
+choices="5 min\n15 min\n30 min\n60 min\n120 min\ncustom"
+chosen=$(echo $choices | menu_cmd -i -p "Timer:")
+
+parse_dur(){
+	next=$(date -d "$1" +%s)
+	now=$(date -d "now" +%s)
+	dur=$(expr $next - $now)
+	[ $dur -lt 0 ] && exit 1
+	return $dur
+}
+
+duration=$(case $chosen in
+  ("5 min") echo 300;;
+  ("15 min") echo 900;;
+  ("30 min") echo 1800;;
+  ("60 min") echo 3600;;
+  ("120 min") echo 7200;;
+  ("custom") 
+		echo $(parse_dur $(printf '' | $MENU_CMD -i -l 30 -p "Current time: $(date +"%H:%M - A %Y/%m/%d") | Timer duration:"))
+esac)
+
+[ -z "$duration" ] && exit 1
+
+name=$(printf '' | $MENU_CMD -p 'Name your timer:')
+
+[ -z "$name" ] && exit 1
+
+if error=$(sleep $duration 2>&1); then
+    wm_loudnotify "${duration} seconds finished. Times up !!! ${name}"
+else
+    dunstify "$error" 
+fi

@@ -1,4 +1,0 @@
-#!/bin/sh
-
-choices="perf\nperf+\neff\neff+\ntlp\nptop\n-gpu\n+gpu"
-chosen=$(echo $choices | $MENU_CMD -i -p "Power") && pkexec _powerprofile $chosen

@@ -1,3 +1,0 @@
-#!/bin/sh
-
-exec $(menu_path | $MENU_CMD "$@")

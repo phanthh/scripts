@@ -1,7 +1,0 @@
-#!/bin/sh
-input=$(echo | $MENU_CMD -p ' search') 
-
-if [ -n "$input" ]
-then
-	open "$BROWSER "https://google.com/search?q=$input"" &
-fi

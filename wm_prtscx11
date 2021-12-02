@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 # mode can be:
 # prtsc = do full screenshot of current screen, save to folder
 # ctrl+prtsc = area-grab, to clipboard

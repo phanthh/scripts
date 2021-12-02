@@ -1,5 +1,4 @@
 #!/bin/sh
-
 case $1 in
 	eff)  tlp bat && systemctl start auto-cpufreq.service ;;
 	eff+) tlp bat && systemctl start auto-cpufreq.service && tlp usb ;;

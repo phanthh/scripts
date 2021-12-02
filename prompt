@@ -1,3 +1,0 @@
-#!/bin/sh
-[ $(echo "No\nYes" | $MENU_CMD -i -p "$1") = "Yes" ] && $2
-

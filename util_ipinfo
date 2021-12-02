@@ -1,3 +1,4 @@
 #!/bin/sh
+
 curl cli.fyi/$1
 

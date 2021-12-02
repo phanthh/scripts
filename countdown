@@ -1,5 +1,0 @@
-#!/bin/bash
-
-SOUND="$HOME/Documents/alarm.mp3"
-termdown -f standard -b -t 'Time out' -q 2 $1 &&
-  /home/phanth/.bin/i3/pomodoro-notify

@@ -1,3 +1,0 @@
-#!/bin/sh
-
-/usr/bin/xvfb-run -a env LD_PRELOAD=/usr/lib/spotify-adblock.so /usr/bin/spotify 
