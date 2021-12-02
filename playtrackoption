@@ -1,4 +1,8 @@
 #/bin/sh
 
 track=$(echo '' | $MENU_CMD -i -p 'Play track')
+if [ $(ps aux | grep '/opt/spotify/spotify' | wc -l) -le 1 ]; then
+  $HOME/.local/bin/spotifyd >/dev/null 2>&1 &
+  sleep 3
+fi
 $HOME/.local/bin/playtrack "$track"
