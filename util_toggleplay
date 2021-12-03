@@ -1,3 +1,0 @@
-#!/bin/sh
-
-[ "$(playerctl -p spotify status)" = "Paused" ] && playerctl -p spotify play || playerctl -p spotify pause

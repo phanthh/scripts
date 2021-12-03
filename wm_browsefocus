@@ -1,0 +1,4 @@
+#!/bin/sh
+
+util_browse $* &
+wm_open

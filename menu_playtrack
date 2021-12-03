@@ -1,6 +1,6 @@
 #!/bin/sh
 
-track=$(echo '' | menu_cmd -i -p '  Play track')
+track=$(echo '' | menu_cmd -i -p ' ')
 if [ $(ps aux | grep '/opt/spotify/spotify' | wc -l) -le 1 ]; then
   util_spotifydaemon >/dev/null 2>&1 &
   sleep 3

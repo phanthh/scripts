@@ -9,13 +9,12 @@ do
     esac
 done
 shift $(($OPTIND - 1))
-if [ -z "$string" ]; then
-	string=$1
-fi
-cmd="$*"
 
+[ -z "$string" ] && string=$1
+cmd="$*"
 con_id=""
 wmcmd="swaymsg"
+
 get_id()
 {
   con_id="$($wmcmd -t get_tree | jq '
@@ -33,8 +32,7 @@ get_id()
 }
 
 get_id
-if [ -n "${con_id:-}" ]
-then 
+if [ -n "${con_id:-}" ]; then 
 	$wmcmd "[con_id=${con_id%% }]" focus
 else 
   $cmd &
@@ -43,4 +41,4 @@ else
 	done
 	$wmcmd "[con_id=${con_id%% }]" focus
 fi
-killall open
+killall wm_open

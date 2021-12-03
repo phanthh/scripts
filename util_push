@@ -1,14 +1,13 @@
 #!/bin/sh
 
-if [ $# -eq 0 ]
-  then
-    git add -A
-    git commit -a -m "Update: $(date +%s)"
-    git push origin
-  else
-    git -C $1 add -A
-    git -C $1 commit -a -m "Update: $(date +%s)"
-    git -C $1 push origin
+if [ $# -eq 0 ]; then
+  git add -A
+  git commit -a -m "Update: $(date +%s)"
+  git push origin
+else
+  git -C $1 add -A
+  git -C $1 commit -a -m "Update: $(date +%s)"
+  git -C $1 push origin
 fi
 
 
