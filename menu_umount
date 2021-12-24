@@ -1,10 +1,10 @@
 #!/bin/sh
 
 choices="$(rclone listremotes)\nphone:\ndatabase"
-chosen=$(echo $choices | menu_cmd -i -p "Mount")
+chosen=$(echo $choices | menu_cmd -i -p "Unmount")
 mntdir="$HOME/Drives/$chosen"
 case $chosen in
-	database) pkexec umount /mnt/database ;;
+	database) pkexec umount /mnt/database ;
 	*) fusermount -u $mntdir ;;
 esac
 

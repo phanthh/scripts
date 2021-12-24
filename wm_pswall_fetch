@@ -1,0 +1,25 @@
+#!/bin/sh
+
+
+# news
+curl -s us.getnews.tech/p=1,n=3,nocolor | textimg \
+  -f /usr/share/fonts/nerd-fonts-complete/TTF/Hack\ Bold\ Nerd\ Font\ Complete\ Mono.ttf \
+  -b '0,0,0,0' \
+  -g '255,255,255,100' \
+  -o /tmp/news.png && \
+  convert /tmp/news.png -alpha set -background none -channel A -evaluate multiply 0.4 +channel /tmp/news.png &
+
+# weather
+curl -s 'wttr.in/?0pq' | textimg \
+  -f /usr/share/fonts/nerd-fonts-complete/TTF/Hack\ Bold\ Nerd\ Font\ Complete\ Mono.ttf \
+  -b '0,0,0,0' \
+  -g white \
+  -o /tmp/weather.png && \
+  convert /tmp/weather.png -alpha set -background none -channel A -evaluate multiply 0.4 +channel /tmp/weather.png &
+
+# qrcode
+qrstr='https://github.com/phanthh'
+qrencode -o /tmp/qrcode.png $qrstr && \
+  convert /tmp/qrcode.png -alpha set -background none -channel A -evaluate multiply 0.4 +channel /tmp/qrcode.png &
+
+wait

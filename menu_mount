@@ -21,5 +21,4 @@ case $chosen in
 			--transfers 10
 					;;
 esac
-
-dunstify "Mount $chosen successfully!"
+[ ! -z "$chosen" ] && dunstify "Mount $chosen successfully!"

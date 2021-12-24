@@ -1,3 +1,6 @@
 #!/bin/sh
 
-bemenu $* --bottom --fn 'NotoSans Nerd Font 11' -H 23 --tb '#0078d7' --tf '#ffffff' --hf '#0078d7'
+# bemenu $* --bottom --fn 'NotoSans Nerd Font 11' -H 23 --tb '#0078d7' --tf '#ffffff' --hf '#0078d7'
+
+wofi -d $*
+

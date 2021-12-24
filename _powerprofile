@@ -3,7 +3,8 @@ case $1 in
 	eff)  tlp bat && systemctl start auto-cpufreq.service ;;
 	eff+) tlp bat && systemctl start auto-cpufreq.service && tlp usb ;;
 	perf) tlp ac && systemctl start auto-cpufreq.service ;;
-	perf+)tlp ac && systemctl stop auto-cpufreq.service && cpupower frequency-set -g performance ;;
+	perf+) tlp ac && systemctl stop auto-cpufreq.service ;;
+	perf++)tlp ac && systemctl stop auto-cpufreq.service && cpupower frequency-set -g performance ;;
 	tlp)  tlpui ;;
 	-gpu) optimus-manager --no-confirm --switch integrated && swaymsg exit ;;
 	+gpu) optimus-manager --no-confirm --switch hybrid && swaymsg exit ;;

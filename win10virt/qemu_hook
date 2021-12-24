@@ -1,0 +1,47 @@
+#!/bin/sh
+# Place this file as /etc/libvirt/hooks/qemu
+
+TOTAL_CORES='0-15'
+TOTAL_CORES_MASK=FFFF       # 0-11, bitmask 0b111111111111
+HOST_CORES='0-5'            # Cores reserved for host
+HOST_CORES_MASK=3F          # 0-5 bitmask 0b000000111111
+VIRT_CORES='6-15'           # Cores reserved for virtual machine(s)
+
+VM_NAME="$1"
+VM_ACTION="$2/$3"
+
+echo $(date) libvirt hook $1 $2 $3 $4 >> /var/log/libvirthook.log
+
+
+if [[ "$VM_ACTION" == "prepare/begin" ]]; then
+    echo $(date) Reserving CPUs $VIRT_CORES for VM $VM_NAME >> /var/log/libvirthook.log
+    systemctl set-property --runtime -- user.slice AllowedCPUs=$HOST_CORES
+    systemctl set-property --runtime -- system.slice AllowedCPUs=$HOST_CORES
+    systemctl set-property --runtime -- init.scope AllowedCPUs=$HOST_CORES
+
+    # The kernel's dirty page writeback mechanism uses kthread workers. They introduce
+    # massive arbitrary latencies and aren't migrated by cset.
+    # Restrict the workqueue to use only cpu 0.
+    echo $HOST_CORES_MASK > /sys/bus/workqueue/devices/writeback/cpumask
+    echo 0 > /sys/bus/workqueue/devices/writeback/numa
+
+    echo $(date) Successfully reserved CPUs $VIRT_CORES >> /var/log/libvirthook.log
+
+elif [[ "$VM_ACTION" == "started/begin" ]]; then
+    if pid=$(pidof qemu-system-x86_64); then
+      chrt -fifo -p 1 $pid
+      echo $(date) Changing scheduling to fifo for pid $pid >> /var/log/libvirthook.log
+    fi
+
+elif [[ "$VM_ACTION" == "release/end" ]]; then
+    echo $(date) Releasing CPUs $VIRT_CORES from VM $VM_NAME >> /var/log/libvirthook.log
+    systemctl set-property --runtime -- user.slice AllowedCPUs=$TOTAL_CORES
+    systemctl set-property --runtime -- system.slice AllowedCPUs=$TOTAL_CORES
+    systemctl set-property --runtime -- init.scope AllowedCPUs=$TOTAL_CORES
+
+    # Revert changes made to the writeback workqueue
+    echo $TOTAL_CORES_MASK > /sys/bus/workqueue/devices/writeback/cpumask
+    echo 1 > /sys/bus/workqueue/devices/writeback/numa
+
+    echo $(date) Successfully released CPUs $VIRT_CORES >> /var/log/libvirthook.log
+fi
