@@ -31,7 +31,9 @@ angle=$(echo "scale=5;-$pi/2+4*$pi*($hour*60+$minute)/(24*60)" | bc)
 #   --cpulist-show=0 \
 #   --memlist-show=0
 
-pscircle --output=/tmp/pswall.png \
+[ ! -d /tmp/pswall ] && mkdir /tmp/pswall
+
+pscircle --output=/tmp/pswall/pswall.png \
   --output-width=$width \
   --output-height=$height \
   --background-color='000000' \
@@ -49,21 +51,21 @@ pscircle --output=/tmp/pswall.png \
   --memlist-show=0 &
 
 # fetch non-frequent data data
-[ ! -f /tmp/weather.png -o ! -f /tmp/news.png -o ! -f /tmp/qrcode.png ] && $HOME/.sh/wm_pswall_fetch &
+[ ! -f /tmp/pswall/weather.png -o ! -f /tmp/pswall/news.png -o ! -f /tmp/pswall/qrcode.png ] && $HOME/.sh/wm_pswall_fetch &
 
 # logo
 cat $HOME/.sh/util_logo | textimg \
   -f /usr/share/fonts/nerd-fonts-complete/TTF/Hack\ Bold\ Nerd\ Font\ Complete\ Mono.ttf \
   -b '0,0,0,0' \
   -g cyan \
-  -o /tmp/logo.png
+  -o /tmp/pswall/logo.png
 
 t2im(){
   echo "$1" | textimg \
   -f /usr/share/fonts/nerd-fonts-complete/TTF/Hack\ Bold\ Nerd\ Font\ Complete\ Mono.ttf \
   -b '0,0,0,0' \
   -g '255,255,255,100' \
-  -o /tmp/cmd$2.png
+  -o /tmp/pswall/cmd$2.png
 }
 
 # command outputs
@@ -80,24 +82,24 @@ t2im "$(nmcli d wifi list | head -n 15)" 9 &
 wait 
 
 # composite
-convert /tmp/pswall.png \
-  -gravity center \( /tmp/logo.png \) -geometry +0+0 -composite \
-  -gravity center \( /tmp/qrcode.png -resize 125% \) -geometry +0+270 -composite \
-  -gravity south \( /tmp/weather.png \) -geometry -630+520 -composite \
-  -gravity southeast \( /tmp/news.png \) -geometry +10+60 -composite \
-  -gravity south \( /tmp/cmd1.png \) -geometry -520+90 -composite \
-  -gravity northwest \( /tmp/cmd2.png \) -geometry +30+30 -composite \
-  -gravity south \( /tmp/cmd3.png \) -geometry +150+90 -composite \
-  -gravity west \( /tmp/cmd4.png \) -geometry +30+30 -composite \
-  -gravity northeast \( /tmp/cmd5.png \) -geometry +30+30 -composite \
-  -gravity southeast \( /tmp/cmd6.png \) -geometry +900+100 -composite \
-  -gravity southwest \( /tmp/cmd7.png \) -geometry +30+90 -composite \
-  -gravity east \( /tmp/cmd9.png \) -geometry +0+60 -composite \
+convert /tmp/pswall/pswall.png \
+  -gravity center \( /tmp/pswall/logo.png \) -geometry +0+0 -composite \
+  -gravity center \( /tmp/pswall/qrcode.png -resize 125% \) -geometry +0+270 -composite \
+  -gravity south \( /tmp/pswall/weather.png \) -geometry -630+520 -composite \
+  -gravity southeast \( /tmp/pswall/news.png \) -geometry +10+60 -composite \
+  -gravity south \( /tmp/pswall/cmd1.png \) -geometry -520+90 -composite \
+  -gravity northwest \( /tmp/pswall/cmd2.png \) -geometry +30+30 -composite \
+  -gravity south \( /tmp/pswall/cmd3.png \) -geometry +150+90 -composite \
+  -gravity west \( /tmp/pswall/cmd4.png \) -geometry +30+30 -composite \
+  -gravity northeast \( /tmp/pswall/cmd5.png \) -geometry +30+30 -composite \
+  -gravity southeast \( /tmp/pswall/cmd6.png \) -geometry +900+100 -composite \
+  -gravity southwest \( /tmp/pswall/cmd7.png \) -geometry +30+90 -composite \
+  -gravity east \( /tmp/pswall/cmd9.png \) -geometry +0+60 -composite \
   -gravity center \
   -pointsize 100 -fill white -annotate +0+5 "$(date +'%H %M')" \
   -pointsize 25 -fill white -annotate +0+100 "$(date +'%a, %b %d')" \
   -pointsize 20 -fill white -annotate +0+100 "$ascii" \
-  /tmp/pswall.png 
+  /tmp/pswall/pswall.png 
 
   # -gravity center \( /tmp/cmd8.png \) -geometry +0+0 -composite \
   # -gravity north \( /tmp/cmd1.png \) -geometry +0+30 -composite \
@@ -108,6 +110,6 @@ convert /tmp/pswall.png \
 
 # smooth swaybg switching
 pid=$(pidof swaybg)
-WAYLAND_DISPLAY=wayland-1 XDG_RUNTIME_DIR="/run/user/$(id -u)" SWAYSOCK="/run/user/$(id -u $LOGNAME)/sway-ipc.$(id -u $LOGNAME).$(pgrep -x sway).sock" swaybg -i '/tmp/pswall.png' -o '*' -m fill &
+WAYLAND_DISPLAY=wayland-1 XDG_RUNTIME_DIR="/run/user/$(id -u)" SWAYSOCK="/run/user/$(id -u $LOGNAME)/sway-ipc.$(id -u $LOGNAME).$(pgrep -x sway).sock" swaybg -i '/tmp/pswall/pswall.png' -o '*' -m fill &
 sleep 1
 kill $pid

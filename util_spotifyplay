@@ -1,0 +1,20 @@
+#!/bin/python
+
+import spotipy
+import subprocess
+import argparse
+import os
+from spotipy.oauth2 import SpotifyClientCredentials
+
+sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=os.getenv('SPOTIFY_CLIENTID'),
+                                                           client_secret=os.getenv('SPOTIFY_CLIENTSECRET')))
+
+parser = argparse.ArgumentParser(description="Play Spotify albums, tracks, playlists, artists using playerctl")
+parser.add_argument('query', type=str, help='query string used to get object')
+parser.add_argument('--type', type=str, help='type of object to play (supported: artist, album, track, playlist)')
+args = parser.parse_args()
+
+results = sp.search(q=args.query, limit=1, type=args.type)
+uri = results[args.type+'s']['items'][0]['uri']
+print(uri)
+subprocess.run(['playerctl', '-p', 'spotify',  'open', uri])

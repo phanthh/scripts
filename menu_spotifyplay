@@ -1,9 +1,10 @@
 #!/bin/sh
 
-track=$(echo '' | menu_cmd -L 2 -i -p  ' ')
+types=$(echo "track\nplaylist\nartist\nalbum" | menu_cmd -i -p 'Type')
+[ ! -z "$types" ] && query=$(echo '' | menu_cmd -i -p 'Query') || exit 1
 check() { echo "$(ps aux | grep '/opt/spotify/spotify' | wc -l)"; }
 if [  $(check) -le 1 ]; then
   util_spotifydaemon >/dev/null 2>&1 &
 fi
 while [ $(check) -le 1 ]; do true; done 
-util_playtrack "$track"
+util_spotifyplay --type "$types" "$query"
