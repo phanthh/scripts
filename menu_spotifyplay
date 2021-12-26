@@ -5,6 +5,7 @@ types=$(echo "track\nplaylist\nartist\nalbum" | menu_cmd -i -p 'Type')
 check() { echo "$(ps aux | grep '/opt/spotify/spotify' | wc -l)"; }
 if [  $(check) -le 1 ]; then
   util_spotifydaemon >/dev/null 2>&1 &
+  while [ $(check) -le 1 ]; do true; sleep 1; done 
 fi
-while [ $(check) -le 1 ]; do true; done 
+
 util_spotifyplay --type "$types" "$query"
