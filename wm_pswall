@@ -54,7 +54,7 @@ pscircle --output=/tmp/pswall/pswall.png \
 [ ! -f /tmp/pswall/weather.png -o ! -f /tmp/pswall/news.png -o ! -f /tmp/pswall/qrcode.png ] && $HOME/.sh/wm_pswall_fetch &
 
 # logo
-cat $HOME/.sh/util_logo | textimg \
+[ ! -f /tmp/pswall/logo.png ] && cat $HOME/.sh/util_logo | textimg \
   -f /usr/share/fonts/nerd-fonts-complete/TTF/Hack\ Bold\ Nerd\ Font\ Complete\ Mono.ttf \
   -b '0,0,0,0' \
   -g cyan \
