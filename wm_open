@@ -1,9 +1,9 @@
 #!/bin/sh
 
 string=
-while getopts s: name
-do
-    case $name in
+
+while getopts s: o; do
+    case "${o}" in
     s)    string="$OPTARG"
 					;;
     esac
