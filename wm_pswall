@@ -57,7 +57,7 @@ pscircle --output=/tmp/pswall/pswall.png \
 [ ! -f /tmp/pswall/logo.png ] && cat $HOME/.sh/util_logo | textimg \
   -f /usr/share/fonts/nerd-fonts-complete/TTF/Hack\ Bold\ Nerd\ Font\ Complete\ Mono.ttf \
   -b '0,0,0,0' \
-  -g cyan \
+  -g '255,255,255,100' \
   -o /tmp/pswall/logo.png
 
 t2im(){

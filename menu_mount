@@ -4,7 +4,7 @@ choices="$(rclone listremotes)\nphone:\ndatabase"
 chosen=$(echo $choices | menu_cmd -i -p "Mount")
 mntdir="$HOME/Drives/$chosen"
 case $chosen in
-	database) pkexec mount /mnt/database ;;
+	database) pkexec mount /mnt/database/ ;;
 	phone:) aft-mtp-mount $HOME/Drives/phone: ;;
   *) 
 		rclone mount $chosen $mntdir \

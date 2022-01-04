@@ -1,11 +1,42 @@
 #!/bin/sh
 
-types=$(echo "track\nplaylist\nartist\nalbum" | menu_cmd -i -p 'Type')
-[ ! -z "$types" ] && query=$(echo '' | menu_cmd -i -p 'Query') || exit 1
-check() { echo "$(ps aux | grep '/opt/spotify/spotify' | wc -l)"; }
-if [  $(check) -le 1 ]; then
-  util_spotifydaemon >/dev/null 2>&1 &
-  while [ $(check) -le 1 ]; do true; sleep 1; done 
-fi
 
-util_spotifyplay --type "$types" "$query"
+adblock_lib="/usr/lib/spotify-adblock.so"
+spotify_path="/usr/bin/spotify"
+spotify_daemon="xvfb-run -a env LD_PRELOAD=$adblock_lib $spotify_path >/dev/null 2>&1"
+types=$(echo "track\nplaylist\nartist\nalbum\nlofi" | menu_cmd -i -p 'Type')
+[ ! -z "$types" ] && {
+  [ "$types" = 'lofi' ] && {
+    types='playlist'
+    query='lofi girl'
+  } || query=$(echo '' | menu_cmd -i -p 'Query')
+} || exit 1
+
+[ -z "$query" ] && exit 1
+
+[ ! playerctl -l | grep 'spotify' ] && {
+  # daemonize spotify using xvfb
+  $spotify_daemon &
+  
+  # wait
+  while ! playerctl -l | grep 'spotify'; do true; sleep 2; done 
+}
+
+uri=$(types="$types" query="$query" python - <<EOF
+import spotipy
+import os
+from spotipy.oauth2 import SpotifyClientCredentials
+
+cid = os.getenv('SPOTIFY_CLIENTID')
+csec = os.getenv('SPOTIFY_CLIENTSECRET')
+types = os.getenv('types')
+query = os.getenv('query')
+auth_manager = SpotifyClientCredentials(client_id=cid, client_secret=csec)
+sp = spotipy.Spotify(auth_manager=auth_manager)
+results = sp.search(q=query, limit=1, type=types)
+uri = results[types+'s']['items'][0]['uri']
+print(uri)
+EOF
+)
+
+playerctl -p  spotify open "$uri"
