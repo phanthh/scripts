@@ -1,0 +1,5 @@
+#!/bin/sh
+
+sound="/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga"
+mpv --no-video --loop=inf $sound &> /dev/null &
+notify-send $*

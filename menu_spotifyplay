@@ -1,23 +1,24 @@
 #!/bin/sh
 
 
+lofi_stream_url='https://www.youtube.com/watch?v=5qap5aO4i9A'
 adblock_lib="/usr/lib/spotify-adblock.so"
 spotify_path="/usr/bin/spotify"
 spotify_daemon="xvfb-run -a env LD_PRELOAD=$adblock_lib $spotify_path"
 types=$(echo "track\nplaylist\nartist\nalbum\nlofi" | menu_cmd -i -p 'Type')
-[ ! -z "$types" ] && {
-  [ "$types" = 'lofi' ] && {
-    types='playlist'
-    query='lofi girl'
-  } || query=$(echo '' | menu_cmd -i -p 'Query')
-} || exit 1
 
-echo "$query $types"
+[ -z "$types" ] && exit 1
+
+[ "$types" = 'lofi' ] && {
+  mpv --no-video "$lofi_stream_url" & 
+  exit 0 
+}
+
+query=$(echo '' | menu_cmd -i -p 'Query')
 
 [ -z "$query" ] && exit 1
 
 [ $(playerctl -l | grep -c 'spotify') = 0 ] && {
-  # daemonize spotify using xvfb
   $spotify_daemon >/dev/null 2>&1 &
   
   # wait
@@ -37,8 +38,9 @@ auth_manager = SpotifyClientCredentials(client_id=cid, client_secret=csec)
 sp = spotipy.Spotify(auth_manager=auth_manager)
 results = sp.search(q=query, limit=1, type=types)
 uri = results[types+'s']['items'][0]['uri']
+print(uri)
 EOF
 )
 
 echo "$uri"
-playerctl -p  spotify open "$uri"
+playerctl -p spotify open "$uri"
