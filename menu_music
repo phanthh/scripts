@@ -5,12 +5,17 @@ lofi_stream_url='https://www.youtube.com/watch?v=5qap5aO4i9A'
 adblock_lib="/usr/lib/spotify-adblock.so"
 spotify_path="/usr/bin/spotify"
 spotify_daemon="xvfb-run -a env LD_PRELOAD=$adblock_lib $spotify_path"
-types=$(echo "track\nplaylist\nartist\nalbum\nlofi" | menu_cmd -i -p 'Type')
+types=$(echo "track\nplaylist\nartist\nalbum\nlofi\nlink" | menu_cmd -i -p 'Type')
 
 [ -z "$types" ] && exit 1
 
 [ "$types" = 'lofi' ] && {
   mpv --no-video "$lofi_stream_url" & 
+  exit 0 
+}
+
+[ "$types" = 'link' ] && {
+  mpv --no-video "$(xclip -o -selection clipboard)" & 
   exit 0 
 }
 
