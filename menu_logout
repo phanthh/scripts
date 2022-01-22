@@ -1,0 +1,12 @@
+#!/bin/sh
+
+[ $(echo "No\nYes" | menu_cmd -i -p "Logout") = "Yes" ] && {
+  ## clean up
+  killall kanshi &
+  killall sworkstyle &
+  killall sway-alttab &
+  killall aw-watcher-window-wayland &
+  wait
+  ## 
+  swaymsg exit
+}
