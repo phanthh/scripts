@@ -1,0 +1,5 @@
+#!/bin/sh
+
+npx wetty &
+pkexec systemctl start sshd && util_browse "localhost:3000/wetty/ssh/$(id -un)" &
+

@@ -1,0 +1,4 @@
+#!/bin/sh
+
+killall 'npm exec wetty'
+pkexec systemctl stop sshd
