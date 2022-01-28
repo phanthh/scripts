@@ -1,18 +1,18 @@
 #!/bin/sh
 
-usage() { echo "$0 usage:" && grep " .)\ #" $0; exit 0; }
-[ $# -eq 0 ] && usage
-[ -f "$1.sync.ipynb" ] && {
-  printf "File already exists: $1.sync.ipynb"
-  exit 1
-}
-kernel=
-while getopts 'pr' o; do
-  case $o in:
-    p) kernel='py' ;;
-    r) kernel='r' ;;
-    h|*) usage && exit 0 ;;
-done
+# usage() { echo "$0 usage:" && grep " .)\ #" $0; exit 0; }
+# [ $# -eq 0 ] && usage
+# [ -f "$1.sync.ipynb" ] && {
+#   printf "File already exists: $1.sync.ipynb"
+#   exit 1
+# }
+# kernel=
+# while getopts 'pr' o; do
+#   case $o in:
+#     p) kernel='py' ;;
+#     r) kernel='r' ;;
+#     h|*) usage && exit 0 ;;
+# done
 
 cp "$HOME/Analysis/template/Untitled.ipynb" "$1.sync.ipynb"
 jupytext --set-formats ipynb,py:percent "$1.sync.ipynb" &
