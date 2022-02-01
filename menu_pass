@@ -1,0 +1,36 @@
+#!/bin/sh
+
+database="$PASS_DATABASE"
+keyfile="$PASS_KEYFILE"
+timeout=15
+pass="$(echo '' | menu_cmd)"
+entry=$(echo ${pass} | keepassxc-cli ls "$database" -k "$keyfile" 2>/dev/null | menu_cmd)
+[ $entry ] || exit
+
+if echo "$entry" | grep -q '.*/'; then
+  details=$(echo ${pass} | keepassxc-cli show "${database}" "${entry}" 2>/dev/null | menu_cmd)
+else
+  gentry=$(echo ${pass} | keepassxc-cli ls "${database}" "${entry}" 2>/dev/null | menu_cmd)
+  details=$(echo ${pass} | keepassxc-cli show "${database}" "${entry}${gentry}" 2>/dev/null | menu-cmd)
+fi
+
+[ $details ] || exit
+
+field=$(echo "$details" | cut -d ':' -f 1)
+
+if [ "$field" == "Password" ]; then
+    if [[ "$entry" =~ .*/ ]]; then
+        echo ${pass} | keepassxc-cli clip "${database}" "${entry}${gentry}" > /dev/null
+    else
+        echo ${pass} | keepassxc-cli clip "${database}" "${entry}" > /dev/null
+    fi
+    notify-send "keepmenu" "Password copied to clipboard for ${timeout} seconds"
+    sleep $timeout
+    echo '' | xclip -sel clip
+
+    # Remove entry from clipboard managers e.g. for copyq
+    # copyq remove 0 2> /dev/null
+else
+    echo "$details" | cut -d ':' -f 2- | sed 's/\s//' | xclip -sel clip
+    notify-send "keepmenu" "${field} copied to clipboard"
+fi
