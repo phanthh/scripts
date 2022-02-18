@@ -9,6 +9,3 @@ case $1 in
 	-gpu) optimus-manager --no-confirm --switch integrated && swaymsg exit ;;
 	+gpu) optimus-manager --no-confirm --switch hybrid && swaymsg exit ;;
 esac
-
-
-
