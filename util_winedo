@@ -1,0 +1,38 @@
+#!/bin/sh
+
+while true; do
+  sleep 300
+  sudo -n true
+  kill -0 "$$" 2>/dev/null || exit
+done &
+
+xhost +SI:localuser:wine
+XDG_RUNTIME_DIR="/run/user/$(id -u wine)"
+DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
+WINE_PREFIX="/home/wine/.wine"
+
+# audio
+echo 'STARTING PULSE'
+cp -r $HOME/.config/pulse/cookie /tmp/pulse-cookie
+chmod 750 /tmp/pulse-cookie
+chown "$USER:audio" /tmp/pulse-cookie
+sudo -u wine env \
+  XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR \
+  DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS \
+  systemctl --user start pulseaudio
+
+# run
+echo 'RUNNING WINE'
+sudo -u wine env \
+  XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR \
+  DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS \
+  WINE_PREFIX=$WINE_PREFIX \
+  "$@"
+
+echo 'STOPPING PULSE'
+sudo -u wine env \
+  XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR \
+  DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS \
+  systemctl --user stop pulseaudio pulseaudio.socket
+
+rm /tmp/pulse-cookie
