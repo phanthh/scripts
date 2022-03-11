@@ -1,38 +1,35 @@
 #!/bin/sh
 
-while true; do
-  sleep 300
-  sudo -n true
-  kill -0 "$$" 2>/dev/null || exit
-done &
-
+echo 'winedo:forward X'
 xhost +SI:localuser:wine
+
+echo 'winedo:start wine systemd'
+sudo loginctl enable-linger wine
+
 XDG_RUNTIME_DIR="/run/user/$(id -u wine)"
 DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
 WINE_PREFIX="/home/wine/.wine"
 
-# audio
-echo 'STARTING PULSE'
-cp -r $HOME/.config/pulse/cookie /tmp/pulse-cookie
-chmod 750 /tmp/pulse-cookie
-chown "$USER:audio" /tmp/pulse-cookie
+sleep 1
+
+echo 'winedo:starting pipewire'
 sudo -u wine env \
   XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR \
   DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS \
-  systemctl --user start pulseaudio
+  systemctl --user start pipewire pipewire-pulse
 
-# run
-echo 'RUNNING WINE'
+echo 'winedo:running under wine'
 sudo -u wine env \
   XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR \
   DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS \
   WINE_PREFIX=$WINE_PREFIX \
   "$@"
 
-echo 'STOPPING PULSE'
+echo 'winedo:stopping pipewire'
 sudo -u wine env \
   XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR \
   DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS \
-  systemctl --user stop pulseaudio pulseaudio.socket
+  systemctl --user stop pipewire pipewire.socket pipewire-pulse pipewire-pulse.socket
 
-rm /tmp/pulse-cookie
+echo 'winedo:stop wine systemd'
+sudo loginctl disable-linger wine
