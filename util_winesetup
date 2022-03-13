@@ -1,0 +1,3 @@
+#!/bin/sh
+
+$HOME/.sh/util_winedo sh -c 'winetricks -q vcrun2008 vcrun2010 vcrun2012 vcrun2013 vcrun2019 dotnet35 dotnet452 xinput xna40 && setup_dxvk install'
