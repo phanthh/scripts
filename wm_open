@@ -39,4 +39,5 @@ else
 	done
 	swaymsg "[con_id=${con_id%% }]" focus
 fi
+
 killall wm_open
