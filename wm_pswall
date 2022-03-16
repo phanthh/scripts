@@ -8,7 +8,7 @@ height=$(($width*9/16))
 # background="$HOME/Pictures/wallpaper/catalina/$hour.png"
 # bgwidth=$(identify $background | awk '{ print $3 }' | awk -F 'x' '{ print $1 }')
 
-scale=$(echo "scale=5;$bgwidth/$width" | bc) 
+scale=$(echo "scale=5;$bgwidth/$width" | bc)
 pi=3.14159265358979323846
 angle=$(echo "scale=5;-$pi/2+4*$pi*($hour*60+$minute)/(24*60)" | bc)
 
@@ -79,7 +79,7 @@ t2im "UPDATE PENDING:\n$($HOME/.sh/util_pendingupdate)" 6 &
 t2im "$(netstat --listen -x)" 7 &
 # t2im "$(cat $HOME/.sh/util_logo)" 8 &
 t2im "$(nmcli d wifi list | head -n 15)" 9 &
-wait 
+wait
 
 # composite
 convert /tmp/pswall/pswall.png \
@@ -99,7 +99,7 @@ convert /tmp/pswall/pswall.png \
   -pointsize 100 -fill white -annotate +0+5 "$(date +'%H %M')" \
   -pointsize 25 -fill white -annotate +0+100 "$(date +'%a, %b %d')" \
   -pointsize 20 -fill white -annotate +0+100 "$ascii" \
-  /tmp/pswall/pswall.png 
+  /tmp/pswall/pswall.png
 
   # -gravity center \( /tmp/cmd8.png \) -geometry +0+0 -composite \
   # -gravity north \( /tmp/cmd1.png \) -geometry +0+30 -composite \
@@ -110,6 +110,6 @@ convert /tmp/pswall/pswall.png \
 
 # smooth swaybg switching
 pid=$(pidof swaybg)
-WAYLAND_DISPLAY=wayland-1 XDG_RUNTIME_DIR="/run/user/$(id -u)" SWAYSOCK="/run/user/$(id -u $LOGNAME)/sway-ipc.$(id -u $LOGNAME).$(pgrep -x sway).sock" swaybg -i '/tmp/pswall/pswall.png' -o '*' -m fill &
+~/.sh/util_swaycontext swaybg -i '/tmp/pswall/pswall.png' -o '*' -m fill &
 sleep 1
 kill $pid
