@@ -11,6 +11,14 @@ done
 shift $(($OPTIND - 1))
 
 [ -z "$string" ] && string=$1
+cmd="$*"
+
+# if [ $SESSION != 'sway' ]; then
+#   "$cmd" &
+#   killall wm_open
+#   exit 0
+# fi
+
 con_id=
 
 get_id()
@@ -33,11 +41,10 @@ get_id
 if [ -n "${con_id:-}" ]; then
 	swaymsg "[con_id=${con_id%% }]" focus
 else
-  "$@" &
+  $cmd &
   while [ -z "${con_id:-}" ]; do
 		get_id
 	done
 	swaymsg "[con_id=${con_id%% }]" focus
 fi
-
 killall wm_open
