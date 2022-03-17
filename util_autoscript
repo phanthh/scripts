@@ -1,0 +1,26 @@
+#!/bin/sh
+
+ibus-daemon -drxR &
+foot --server &
+
+swhks &
+pkexec swhkd -c ~/.config/swhkd/swhkdrc &
+
+
+[ "$(cat /sys/class/power_supply/BAT1/status)" = "Discharging" ] && {
+  brightnessctl s 0%
+  util_exmonctl -s 0
+} &
+
+# graphical
+util_browse &
+thunderbird &
+# discord &
+
+sleep 1
+footclient &
+
+sleep 5
+gammastep &
+pkill -f 'aw-watcher-window-wayland'; aw-watcher-window-wayland &
+pkill -f 'aw-watcher-spotify'; aw-watcher-spotify &

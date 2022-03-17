@@ -30,17 +30,22 @@ get_id()
     )).id)')"
 }
 
-get_id
-if [ -n "${con_id:-}" ]; then
-	swaymsg "[con_id=${con_id%% }]" focus
-else
+if [ $SESSION != 'sway' ]; then
   $cmd &
-  c=0
-  while [ -z "${con_id:-}" && $c -le 5 ]; do
-		get_id
-    sleep 0.5
-    c=$(($c+1))
-	done
-	swaymsg "[con_id=${con_id%% }]" focus
+else
+  get_id
+  if [ -n "${con_id:-}" ]; then
+    swaymsg "[con_id=${con_id%% }]" focus
+  else
+    $cmd &
+    c=0
+    while [ -z "${con_id:-}" && $c -le 5 ]; do
+      get_id
+      sleep 0.5
+      c=$(($c+1))
+    done
+    swaymsg "[con_id=${con_id%% }]" focus
+  fi
 fi
+
 killall wm_open
