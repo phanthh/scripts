@@ -1,3 +1,12 @@
 #!/bin/sh
 
-[ $(echo "No\nYes" | menu_cmd -i -p "Logout") = "Yes" ] && swaymsg exit
+[ $(echo "No\nYes" | menu_cmd -i -p "Logout") = "Yes" ] && {
+  case $SESSION in
+    sway)
+      swaymsg exit ;;
+    labwc)
+      killall labwc ;;
+    *)
+      echo "Session $SESSION is invalid !" ;;
+  esac
+}

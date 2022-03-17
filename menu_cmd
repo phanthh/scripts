@@ -1,5 +1,5 @@
 #!/bin/sh
 
-bemenu $* --bottom --fn 'NotoSans Nerd Font 11' -H 23 --tb '#ffffff' --tf '#101010' --hb '#ffffff' --hf '#101010'
+# bemenu $* --center --fn 'NotoSans Nerd Font 11' -H 23 --tb '#ffffff' --tf '#101010' --hb '#ffffff' --hf '#101010'
 
-# wofi -d $*
+wofi -d -W 35% -H 20% $*
