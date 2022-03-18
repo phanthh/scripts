@@ -31,7 +31,11 @@ get_id()
 }
 
 if [ $SESSION != 'sway' ]; then
-  $cmd &
+  if ! pgrep -x "$cmd"; then
+    $cmd &
+  else
+    dunstify "$cmd is already running!" -t 3000
+  fi
 else
   get_id
   if [ -n "${con_id:-}" ]; then
