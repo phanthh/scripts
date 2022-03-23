@@ -2,6 +2,7 @@
 
 ibus-daemon -drxR &
 foot --server &
+wl-paste --watch cliphist store &
 
 swhks &
 pkexec swhkd -c ~/.config/swhkd/swhkdrc &
