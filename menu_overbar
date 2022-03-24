@@ -1,0 +1,4 @@
+#!/bin/sh
+pkill -f 'wob'
+pkill -f "tail -f $WOBSOCK"
+rm -f $WOBSOCK && mkfifo $WOBSOCK && tail -f $WOBSOCK | wob -a 'bottom' -M 50 -b 2 -p 4 -o 0 --border-color '#424242FF' --bar-color '#FFFFFFFF' --width 200 --height 25 --background-color '#101010FF' $*

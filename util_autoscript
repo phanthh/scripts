@@ -4,9 +4,9 @@ ibus-daemon -drxR &
 foot --server &
 wl-paste --watch cliphist store &
 
+~/.sh/menu_overbar &
 swhks &
-pkexec swhkd -c ~/.config/swhkd/swhkdrc &
-
+pkexec swhkd -c ~/.config/swhkd/swhkdrc -C 150 &
 
 [ "$(cat /sys/class/power_supply/BAT1/status)" = "Discharging" ] && {
   brightnessctl s 0%
