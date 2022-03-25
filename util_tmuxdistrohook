@@ -1,6 +1,0 @@
-#!/bin/sh
-
-FILE=$XDG_CACHE_HOME/distro
-[ -f $FILE ] && touch $FILE
-echo "$1" > $FILE
-# $HOME/.local/bin/distrobox-enter $DISTRO

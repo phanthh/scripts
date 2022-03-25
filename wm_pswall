@@ -110,6 +110,6 @@ convert /tmp/pswall/pswall.png \
 
 # smooth swaybg switching
 pid=$(pidof swaybg)
-~/.sh/util_swaycontext swaybg -i '/tmp/pswall/pswall.png' -o '*' -m fill &
+WAYLAND_DISPLAY=wayland-1 XDG_RUNTIME_DIR="/run/user/$(id -u)" SWAYSOCK="/run/user/$(id -u $LOGNAME)/sway-ipc.$(id -u $LOGNAME).$(pgrep -x sway).sock" swaybg -i '/tmp/pswall/pswall.png' -o '*' -m fill &
 sleep 1
 kill $pid

@@ -8,3 +8,5 @@ pkill -f 'aw-server' &
 pkill -f 'aw-server' &
 pkill -f 'swhks' &
 pkill -f 'gammastep' &
+pkill -f 'aw-watcher-window-wayland' &
+pkill -f 'aw-watcher-spotify' &

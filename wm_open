@@ -1,7 +1,6 @@
 #!/bin/sh
 
 string=
-
 while getopts s: o; do
     case "${o}" in
     s)    string="$OPTARG"
@@ -12,8 +11,20 @@ shift $(($OPTIND - 1))
 
 [ -z "$string" ] && string=$1
 cmd="$*"
-con_id=
 
+
+if [ $SESSION != 'sway' ]; then
+  if ! pgrep -x "$cmd"; then
+    $cmd &
+  else
+    dunstify "$cmd is already running!" -t 3000
+  fi
+  exit 0
+fi
+
+
+
+con_id=
 get_id()
 {
   con_id="$(swaymsg -t get_tree | jq '
@@ -30,26 +41,17 @@ get_id()
     )).id)')"
 }
 
-if [ $SESSION != 'sway' ]; then
-  if ! pgrep -x "$cmd"; then
-    $cmd &
-  else
-    dunstify "$cmd is already running!" -t 3000
-  fi
+get_id
+if [ -n "${con_id:-}" ]; then
+  swaymsg "[con_id=${con_id%% }]" focus
 else
-  get_id
-  if [ -n "${con_id:-}" ]; then
-    swaymsg "[con_id=${con_id%% }]" focus
-  else
-    $cmd &
-    c=0
-    while [ -z "${con_id:-}" && $c -le 5 ]; do
-      get_id
-      sleep 0.5
-      c=$(($c+1))
-    done
-    swaymsg "[con_id=${con_id%% }]" focus
-  fi
+  $cmd &
+  c=0
+  while [ -z "${con_id:-}" && $c -le 5 ]; do
+    get_id
+    sleep 0.5
+    c=$(($c+1))
+  done
+  swaymsg "[con_id=${con_id%% }]" focus
 fi
-
 killall wm_open

@@ -4,6 +4,6 @@ while :;do
   swhks &
   pid="$!"
   echo "$pid"
-  sleep 5
+  sleep 5m
   kill $pid
 done

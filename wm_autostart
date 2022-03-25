@@ -5,7 +5,7 @@ foot --server &
 wl-paste --watch cliphist store &
 
 ~/.sh/menu_overbar &
-swhks &
+~/.sh/wm_swhks &
 pkexec swhkd -c ~/.config/swhkd/swhkdrc -C 150 &
 
 [ "$(cat /sys/class/power_supply/BAT1/status)" = "Discharging" ] && {
@@ -24,5 +24,5 @@ footclient &
 
 sleep 5
 gammastep &
-pkill -f 'aw-watcher-window-wayland'; aw-watcher-window-wayland &
-pkill -f 'aw-watcher-spotify'; aw-watcher-spotify &
+aw-watcher-window-wayland &
+aw-watcher-spotify &

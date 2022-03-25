@@ -2,12 +2,11 @@
 
 sound="/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga"
 mpv --no-video --loop=inf $sound &> /dev/null &
-pid=$! 
-action=$(dunstify --urgency=critical --action="default,Replay" "$1") 
+pid=$!
+action=$(dunstify --urgency=critical --action="default,Replay" "$1")
 
 case "$action" in
     "default") reply_action ;;
     "forwardAction") forward_action ;;
     "2") kill $pid ;;
 esac
-
