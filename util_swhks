@@ -1,0 +1,9 @@
+#!/bin/sh
+
+while :;do
+  swhks &
+  pid="$!"
+  echo "$pid"
+  sleep 5
+  kill $pid
+done
