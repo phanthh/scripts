@@ -2,9 +2,9 @@
 
 ibus-daemon -drxR &
 foot --server &
-wl-paste --watch cliphist store &
+[ "$SESSION" == 'sway' || "$SESSION" == 'labwc' ] && wl-paste --watch cliphist store &
 
-$HOME/.sh/menu_overbar &
+[ "$SESSION" == 'sway' || "$SESSION" == 'labwc' ] && $HOME/.sh/menu_overbar &
 $HOME/.sh/wm_swhks &
 pkexec swhkd -c $HOME/.config/swhkd/swhkdrc -C 150 &
 
@@ -26,6 +26,6 @@ sleep 1
 footclient &
 
 sleep 5
-gammastep &
+[ "$SESSION" == 'sway' || "$SESSION" == 'labwc' ] && gammastep &
 aw-watcher-window-wayland &
 aw-watcher-spotify &
