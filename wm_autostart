@@ -2,9 +2,9 @@
 
 ibus-daemon -drxR &
 foot --server &
-[ "$SESSION" == 'sway' || "$SESSION" == 'labwc' ] && wl-paste --watch cliphist store &
+[ "$SESSION" = 'sway' ] || [ "$SESSION" = 'labwc' ] && wl-paste --watch cliphist store &
 
-[ "$SESSION" == 'sway' || "$SESSION" == 'labwc' ] && $HOME/.sh/menu_overbar &
+[ "$SESSION" = 'sway' ] || [ "$SESSION" = 'labwc' ] && $HOME/.sh/menu_overbar &
 $HOME/.sh/wm_swhks &
 pkexec swhkd -c $HOME/.config/swhkd/swhkdrc -C 150 &
 
@@ -12,8 +12,8 @@ pkexec swhkd -c $HOME/.config/swhkd/swhkdrc -C 150 &
   brightnessctl s 0%
   $HOME/.sh/util_exmonctl -s 0
 } || {
-  brightnessctl s 50%
-  $HOME/.sh/util_exmonctl -s 50
+  brightnessctl s 30%
+  $HOME/.sh/util_exmonctl -s 30
 } &
 
 # graphical
@@ -26,6 +26,6 @@ sleep 1
 footclient &
 
 sleep 5
-[ "$SESSION" == 'sway' || "$SESSION" == 'labwc' ] && gammastep &
+[ "$SESSION" = 'sway' ] || [ "$SESSION" = 'labwc' ] && gammastep &
 aw-watcher-window-wayland &
 aw-watcher-spotify &

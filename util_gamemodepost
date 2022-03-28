@@ -1,0 +1,6 @@
+#!/bin/sh
+
+[ "$SESSION" = 'sway' ] && {
+  swaymsg input type:keyboard repeat_delay 225
+  swaymsg input type:keyboard repeat_rate 200
+}
