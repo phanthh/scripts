@@ -1,7 +1,7 @@
 #!/bin/sh
 
-
-[ "$SESSION" = 'sway' ] && {
-  swaymsg input type:keyboard repeat_delay 600
-  swaymsg input type:keyboard repeat_rate 25
+SWAYSOCK="/run/user/$(id -u $LOGNAME)/sway-ipc.$(id -u $LOGNAME).$(pgrep -x sway).sock"
+[ -S "$SWAYSOCK" ] && {
+  swaymsg -s $SWAYSOCK input type:keyboard repeat_delay 600
+  swaymsg -s $SWAYSOCK input type:keyboard repeat_rate 25
 }
