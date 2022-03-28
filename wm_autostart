@@ -18,9 +18,9 @@ pkexec swhkd -c $HOME/.config/swhkd/swhkdrc -C 150 &
 
 # graphical
 util_browse &
-thunderbird &
-spotify &
-discord &
+# thunderbird &
+# spotify &
+# discord &
 
 sleep 1
 footclient &
