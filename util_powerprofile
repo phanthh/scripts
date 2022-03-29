@@ -21,4 +21,5 @@ case $1 in
 	tlp) tlpui ;;
 	# -gpu) optimus-manager --no-confirm --switch integrated && swaymsg exit ;;
 	# +gpu) optimus-manager --no-confirm --switch hybrid && swaymsg exit ;;
+  *) ;;
 esac
