@@ -1,7 +1,7 @@
 #!/bin/sh
 
-usage() { 
-	echo "$0 Usage: [-s value][-i inc_amt][-d dec_amnt]" && grep " .)\ #" $0; exit 0; 
+usage() {
+	echo "$0 Usage: [-s value][-i inc_amt][-d dec_amnt]" && grep " .)\ #" $0; exit 0;
 }
 [ $# -eq 0 ] && usage
 curr_value=$(ddcutil getvcp 10 | awk -F ',' '{ print $1 }' | awk '{ print $9 }')

@@ -1,3 +1,6 @@
 #!/bin/sh
 
-$HOME/.sh/util_winedo sh -c 'winetricks -q vcrun2008 vcrun2010 vcrun2012 vcrun2013 vcrun2019 dotnet35 dotnet452 xinput xna40 && setup_dxvk install'
+winetricks -q vcrun2008 vcrun2010 vcrun2012 vcrun2013 vcrun2019 dotnet35 dotnet452 xinput xna40 corefonts
+setup_dxvk install
+rm -r $HOME/.wine/drive_c/users/$USER
+ln -s $HOME/.steam/steam/steamapps/compatdata/userdata/users/steamuser $HOME/.wine/drive_c/users/$USER

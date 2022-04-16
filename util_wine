@@ -1,0 +1,5 @@
+#!/bin/sh
+
+
+[ ! -d $HOME/.wine ] && util_winesetup
+gamemoderun mangohud prime-run wine "$@"
