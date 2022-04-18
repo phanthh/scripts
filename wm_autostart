@@ -21,6 +21,7 @@ util_browse &
 thunderbird &
 spotify &
 discord &
+keepassxc --keyfiles
 
 sleep 1
 footclient &
