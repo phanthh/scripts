@@ -1,6 +1,7 @@
 #!/bin/sh
 
 
+[ ! -d $HOME/.cache/Temp ] && mkdir -p $HOME/.cache/Temp
 USERS="$HOME/.local/share/Steam/steamapps/compatdata/userdata/users"
 DRIVEC="$HOME/.cache/proton-call/Proton Experimental/pfx/drive_c/"
 [ ! -d $HOME/.cache/proton-call ] && {

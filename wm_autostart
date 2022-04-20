@@ -1,32 +1,63 @@
 #!/bin/sh
 
-ibus-daemon -drxR &
-foot --server &
-[ "$SESSION" = 'sway' ] || [ "$SESSION" = 'labwc' ] && wl-paste --watch cliphist store &
+# shared
+ibus-daemon -drxR & # ibus
+foot --server & # terminal server
+$HOME/.sh/wm_swhks & # swhks
+pkexec swhkd -c $HOME/.config/swhkd/swhkdrc -C 150 & # swhkd
+wluma &
 
-[ "$SESSION" = 'sway' ] || [ "$SESSION" = 'labwc' ] && $HOME/.sh/menu_overbar &
-$HOME/.sh/wm_swhks &
-pkexec swhkd -c $HOME/.config/swhkd/swhkdrc -C 150 &
+wm_daemons() {
+  wl-paste --watch cliphist store & # clipboard manager
+  $HOME/.sh/menu_overbar & # overbar
+  kanshi & # multi monitor manager
+  dunst & # notification
+  gammastep & # nightlight
+  # idle
+  swayidle -w \
+    timeout 3000 'swaylock -f' \
+    timeout 3005 'swaymsg "output * dpms off"' \
+    resume 'swaymsg "output * dpms on"' \
+    before-sleep 'playerctl pause' \
+    before-sleep 'swaylock -f' \
+    timeout 6000 '[ "$(cat /sys/class/power_supply/BAT1/status)" = "Discharging" ] && systemctl suspend' &
+}
 
-[ "$(cat /sys/class/power_supply/BAT1/status)" = "Discharging" ] && {
-  brightnessctl s 0%
-  $HOME/.sh/util_exmonctl -s 0
-} || {
-  brightnessctl s 30%
-  $HOME/.sh/util_exmonctl -s 30
-} &
+applications() {
+  util_browse &
+  thunderbird &
+  spotify &
+  discord &
+  keepassxc &
+  while [ ! -e "$XDG_RUNTIME_DIR/foot-$WAYLAND_DISPLAY.sock" ]; do done && footclient &
+}
 
-# graphical
-util_browse &
-thunderbird &
-spotify &
-discord &
-keepassxc &
+# daemons
+case "$SESSION" in
+  sway)
+    sworkstyle &
+    wm_daemons &
+    applications &
+    ;;
+  labwc)
+    wm_daemons &
+    applications &
+    ;;
+  gnome)
+    ;;
+  plasma)
+    ;;
+esac &
 
-sleep 1
-footclient &
 
-sleep 5
-[ "$SESSION" = 'sway' ] || [ "$SESSION" = 'labwc' ] && gammastep &
-aw-watcher-window-wayland &
-aw-watcher-spotify &
+# [ "$(cat /sys/class/power_supply/BAT1/status)" = "Discharging" ] && {
+#   brightnessctl s 0%
+#   $HOME/.sh/util_exmonctl -s 0
+# } || {
+#   brightnessctl s 30%
+#   $HOME/.sh/util_exmonctl -s 30
+# } &
+
+# activitywatch
+# aw-watcher-window-wayland &
+# aw-watcher-spotify &
