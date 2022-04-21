@@ -7,7 +7,9 @@ pkill -f 'kanshi' &
 pkill -f 'dunst' &
 pkill -f 'sworkstyle' &
 pkill -f 'gammastep' &
+pkill -f 'wluma' &
 pkill -f "tail -f $WOBSOCK" &
+pkill -f 'clight' &
 
 # activitywatch
 # pkill -f 'aw-watcher' &
