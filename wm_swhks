@@ -1,5 +1,6 @@
 #!/bin/sh
 
+
 pkexec swhkd -c $HOME/.config/swhkd/swhkdrc -C 150 &
 while :;do
   swhks &
