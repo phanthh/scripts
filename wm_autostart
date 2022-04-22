@@ -18,14 +18,8 @@ wm_daemons() {
   kanshi & # multi monitor manager
   dunst & # notification
 
-  # autobright
-  # gammastep -l "${lat}:${lng}" &
-
   # brightness manager
-  location=$(curl -s "https://location.services.mozilla.com/v1/geolocate?key=geoclue")
-  lat=$(echo $location | jq '.location | .lat')
-  lng=$(echo $location | jq '.location | .lng')
-  clight --lat="$lat" --lon="$lng"
+  clight &
 
   # idle
   swayidle -w \
@@ -34,6 +28,14 @@ wm_daemons() {
     before-sleep 'swaylock -f' \
     timeout 600 '[ "$(cat /sys/class/power_supply/BAT1/status)" = "Discharging" ] && systemctl suspend' &
     # timeout 305 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+
+  # fetch location
+  location=$(curl -s "https://location.services.mozilla.com/v1/geolocate?key=geoclue")
+  lat=$(echo $location | jq '.location | .lat')
+  lng=$(echo $location | jq '.location | .lng')
+
+  # night light
+  sleep 1 && gammastep -l "${lat}:${lng}" &
 }
 
 applications() {
