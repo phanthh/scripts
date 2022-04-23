@@ -21,7 +21,7 @@ kernel=""
 initramfs=""
 params=""
 
-### 
+###
 gen_linux_conf(){
 	package='linux'
 	label='Arch Linux Vanilla'
@@ -85,10 +85,10 @@ del_efi_entry(){
 gen_all_entries(){
 	gen_linux_conf
 	gen_efi_entry
-	 
+
 	gen_linux_zen_conf
 	gen_efi_entry
-	
+
 	gen_linux_custom_conf
 	gen_efi_entry
 }
@@ -112,8 +112,8 @@ while getopts 'GDR :h' o; do
 		G) gen_all_entries ;;
     D) del_all_entries ;;
     R) del_all_entries && gen_all_entries ;;
-    h|*) 
-			usage 
+    h|*)
+			usage
 			exit 0
 			;;
   esac

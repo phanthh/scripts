@@ -30,12 +30,12 @@ wm_daemons() {
     # timeout 305 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
 
   # fetch location
-  location=$(curl -s "https://location.services.mozilla.com/v1/geolocate?key=geoclue")
-  lat=$(echo $location | jq '.location | .lat')
-  lng=$(echo $location | jq '.location | .lng')
+  # location=$(curl -s "https://location.services.mozilla.com/v1/geolocate?key=geoclue")
+  # lat=$(echo $location | jq '.location | .lat')
+  # lng=$(echo $location | jq '.location | .lng')
 
   # night light
-  sleep 1 && gammastep -l "${lat}:${lng}" &
+  gammastep &
 }
 
 applications() {
