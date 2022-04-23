@@ -43,7 +43,8 @@ applications() {
   thunderbird &
   spotify &
   discord &
-  keepassxc &
+  keepassxc --keyfile "$PASS_KEYFILE" "$PASS_DATABASE" &
+
   sleep 1; footclient &
 }
 
