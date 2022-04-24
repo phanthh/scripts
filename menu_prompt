@@ -1,3 +1,2 @@
 #!/bin/sh
-[ $(echo "No\nYes" | menu_cmd -i -p "$1") = "Yes" ] && $2
-
+echo ' No \n Yes ' | menu_cmd -i -p "$1" | grep -q 'Yes' && "$2"

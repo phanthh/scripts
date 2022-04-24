@@ -1,7 +1,7 @@
 #!/bin/sh
 
 choices="default\nlinux\nlinux-zen\nlinux-lts\nlinux-harden\nwindow\nvfio"
-chosen=$(echo $choices | menu_cmd -i -p "Reboot")
+chosen=$(echo $choices | menu_cmd -i -p '')
 
 case $chosen in
 	default) reboot;;
@@ -11,4 +11,4 @@ case $chosen in
 	linux-harden) pkexec grub-reboot 'Advanced options for Arch Linux>Arch Linux, with Linux linux-harden' && reboot;;
   window) pkexec grub-reboot 'Windows 11 - Encrypted Boot' && reboot;;
 esac
-case $chosen in 
+case $chosen in
