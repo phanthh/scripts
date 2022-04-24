@@ -29,6 +29,8 @@ wm_daemons() {
     timeout 600 '[ "$(cat /sys/class/power_supply/BAT1/status)" = "Discharging" ] && systemctl suspend' &
     # timeout 305 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
 
+  sway-audio-idle-inhibit &
+
   # fetch location
   # location=$(curl -s "https://location.services.mozilla.com/v1/geolocate?key=geoclue")
   # lat=$(echo $location | jq '.location | .lat')
