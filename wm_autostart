@@ -41,11 +41,11 @@ wm_daemons() {
 }
 
 applications() {
-  # util_browse &
-  # thunderbird &
-  # spotify &
+  util_browse &
+  thunderbird &
+  spotify &
   # discord &
-  # keepassxc --keyfile "$PASS_KEYFILE" "$PASS_DATABASE" &
+  echo '0' | keepassxc --pw-stdin --keyfile "$PASS_KEYFILE" "$PASS_DATABASE" &
 
   sleep 1
   footclient &
