@@ -1,4 +1,5 @@
 #!/bin/sh
 
-choices="perf\nperf+\neff\neff+\ntlp\nptop\n-gpu\n+gpu"
-chosen=$(echo $choices | menu_cmd -i -p '🗲') && pkexec util_powerprofile $chosen
+choices="  perf \n  perf+ \n  eff \n  eff+ \n🗲 tlp \n ptop"
+chosen=$(echo $choices | menu_cmd -i -p '🗲')
+[ -z $chosen ] || pkexec util_powerprofile $(echo "$chosen" | awk '{ print $2 }')
