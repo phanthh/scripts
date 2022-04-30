@@ -2,29 +2,37 @@
 
 file="$1"
 case "$1" in
-  *.cpp | *.c ) 
-    g++ $1 -o /tmp/_run && /tmp/_run ;;
-  *.rs )
-    rustc $1 -o /tmp/_run && /tmp/_run ;;
-  *.js )
-    node $1 ;;
-  *.ts )
-    tsc --target esnext --strict $1 --outfile /tmp/_run && node /tmp/_run ;;
-  *.py )
-    python $1 ;;
-  *.asm )
-    nasm -f elf32 $1 -o /tmp/_run.o && ld -m elf_i386 /tmp/_run.o -o /tmp/_run && /tmp/_run ;;
-  *.r )
-    R $1 ;;
-  *.m )
-    octave $1 ;;
-  *.scala )
-    scala $1 ;;
-  *.java )
-    java $1 ;;
-  *)
-    chmod +x $1 &> /dev/null && exec $1 ;;
+*.cpp | *.c)
+  g++ $file -o /tmp/_run && /tmp/_run
+  ;;
+*.rs)
+  rustc $file -o /tmp/_run && /tmp/_run
+  ;;
+*.js)
+  node $file
+  ;;
+*.ts)
+  tsc --target esnext --strict $file --outfile /tmp/_run && node /tmp/_run
+  ;;
+*.py)
+  python $file
+  ;;
+*.asm)
+  nasm -f elf32 $file -o /tmp/_run.o && ld -m elf_i386 /tmp/_run.o -o /tmp/_run && /tmp/_run
+  ;;
+*.r)
+  R $file
+  ;;
+*.m)
+  octave $file
+  ;;
+*.scala)
+  scala $file
+  ;;
+*.java)
+  java $file
+  ;;
+*)
+  chmod +x $file &>/dev/null && exec $file
+  ;;
 esac
-
-
-
