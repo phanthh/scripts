@@ -1,0 +1,21 @@
+#!/bin/sh
+
+usage() {
+  echo "$0 Usage: [-s value]" && grep " .)\ #" $0
+  exit 0
+}
+
+while getopts 'ds:' o; do
+  case "$o" in
+  s) echo "$OPTARG" >"$SOVSOCK" ;;
+  d)
+    pkill -f 'sob'
+    pkill -f "tail -f $SOVSOCK"
+    rm -f "$SOVSOCK" && mkfifo "$SOVSOCK" && tail -f "$SOVSOCK" | sov
+    ;;
+  h)
+    usage
+    exit 0
+    ;;
+  esac
+done

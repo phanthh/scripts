@@ -14,7 +14,7 @@ de_daemons() {
 
 wm_daemons() {
   wl-paste --watch cliphist store & # clipboard manager
-  $HOME/.sh/menu_overbar &          # overbar
+  $HOME/.sh/wm_wob &                # overbar
   kanshi &                          # multi monitor manager
   dunst &                           # notification
 
@@ -56,7 +56,9 @@ sway)
   de_daemons &
   wm_daemons &
   applications &
-  sworkstyle &
+
+  $HOME/.sh/wm_sov -d & # workspace viewer
+  sworkstyle &          # workspace rename
   ;;
 labwc)
   de_daemons &
