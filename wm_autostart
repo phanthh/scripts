@@ -38,6 +38,7 @@ wm_daemons() {
 
   # night light
   gammastep &
+
 }
 
 applications() {
