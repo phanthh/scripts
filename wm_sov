@@ -9,7 +9,7 @@ while getopts 'ds:' o; do
   case "$o" in
   s) echo "$OPTARG" >"$SOVSOCK" ;;
   d)
-    pkill -f 'sob'
+    killall 'sob'
     pkill -f "tail -f $SOVSOCK"
     rm -f "$SOVSOCK" && mkfifo "$SOVSOCK" && tail -f "$SOVSOCK" | sov
     ;;
