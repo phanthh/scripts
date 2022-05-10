@@ -3,76 +3,76 @@
 # shared
 
 de_daemons() {
-  $HOME/.sh/wm_swhks & # keyboard shortcuts
-  foot --server &      # terminal server
-  ibus-daemon -drxR &  # ibus
+	$HOME/.sh/wm_swhks & # keyboard shortcuts
+	foot --server &      # terminal server
+	ibus-daemon -drxR &  # ibus
 
-  # activitywatch
-  # aw-watcher-window-wayland &
-  # aw-watcher-spotify &
+	# activitywatch
+	# aw-watcher-window-wayland &
+	# aw-watcher-spotify &
 }
 
 wm_daemons() {
-  wl-paste --watch cliphist store & # clipboard manager
-  $HOME/.sh/wm_wob &                # overbar
-  kanshi &                          # multi monitor manager
-  dunst &                           # notification
+	wl-paste --watch cliphist store & # clipboard manager
+	$HOME/.sh/wm_wob &                # overbar
+	kanshi &                          # multi monitor manager
+	dunst &                           # notification
 
-  # brightness manager
-  clight &
+	# brightness manager
+	clight &
 
-  # idle
-  swayidle -w \
-    timeout 300 'swaylock -f' \
-    before-sleep 'playerctl pause' \
-    before-sleep 'swaylock -f' \
-    timeout 600 '[ "$(cat /sys/class/power_supply/BAT1/status)" = "Discharging" ] && systemctl suspend' &
-  # timeout 305 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+	# idle
+	swayidle -w \
+		timeout 300 'swaylock -f' \
+		before-sleep 'playerctl pause' \
+		before-sleep 'swaylock -f' \
+		timeout 600 '[ "$(cat /sys/class/power_supply/BAT1/status)" = "Discharging" ] && systemctl suspend' &
+	# timeout 305 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
 
-  sway-audio-idle-inhibit &
+	sway-audio-idle-inhibit &
 
-  # fetch location
-  # location=$(curl -s "https://location.services.mozilla.com/v1/geolocate?key=geoclue")
-  # lat=$(echo $location | jq '.location | .lat')
-  # lng=$(echo $location | jq '.location | .lng')
+	# fetch location
+	# location=$(curl -s "https://location.services.mozilla.com/v1/geolocate?key=geoclue")
+	# lat=$(echo $location | jq '.location | .lat')
+	# lng=$(echo $location | jq '.location | .lng')
 
-  # night light
-  gammastep &
+	# night light
+	gammastep &
 
 }
 
 applications() {
-  util_browse &
-  thunderbird &
-  spotify &
-  # discord &
-  echo '0' | keepassxc --pw-stdin --keyfile "$PASS_KEYFILE" "$PASS_DATABASE" &
+	util_browse &
+	thunderbird &
+	spotify &
+	# discord &
+	echo '0' | keepassxc --pw-stdin --keyfile "$PASS_KEYFILE" "$PASS_DATABASE" &
 
-  sleep 1
-  footclient &
+	sleep 1
+	footclient &
 }
 
 case "$SESSION" in
 sway)
-  de_daemons &
-  wm_daemons &
-  applications &
+	de_daemons &
+	wm_daemons &
+	applications &
 
-  $HOME/.sh/wm_sov -d & # workspace viewer
-  sworkstyle &          # workspace rename
-  ;;
+	$HOME/.sh/wm_sov -d & # workspace viewer
+	sworkstyle &          # workspace rename
+	;;
 labwc)
-  de_daemons &
-  wm_daemons &
-  applications &
-  ;;
+	de_daemons &
+	wm_daemons &
+	applications &
+	;;
 gnome)
-  de_daemons &
-  ;;
+	de_daemons &
+	;;
 plasma)
-  de_daemons &
-  ;;
+	de_daemons &
+	;;
 shell)
-  $HOME/.sh/wm_swhks & # keyboard shortcuts
-  ;;
+	$HOME/.sh/wm_swhks & # keyboard shortcuts
+	;;
 esac &

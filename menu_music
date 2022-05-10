@@ -9,13 +9,13 @@ types=$(echo " track \n playlist \n artist \n album \n lofi \n
 [ -z "$types" ] && exit 1
 
 [ "$types" = 'lofi' ] && {
-  mpv "$lofi_stream_url" &
-  exit 0
+	mpv "$lofi_stream_url" &
+	exit 0
 }
 
 [ "$types" = 'link' ] && {
-  mpv "$(xclip -o -selection clipboard)" &
-  exit 0
+	mpv "$(xclip -o -selection clipboard)" &
+	exit 0
 }
 
 query=$(echo '' | menu_cmd -i -p '')
@@ -23,17 +23,17 @@ query=$(echo '' | menu_cmd -i -p '')
 [ -z "$query" ] && exit 1
 
 [ $(playerctl -l | grep -c 'spotify') = 0 ] && {
-  $spotify_daemon >/dev/null 2>&1 &
+	$spotify_daemon >/dev/null 2>&1 &
 
-  # wait
-  while ! playerctl -l | grep 'spotify'; do
-    true
-    sleep 2
-  done
+	# wait
+	while ! playerctl -l | grep 'spotify'; do
+		true
+		sleep 2
+	done
 }
 
 uri=$(
-  types="$types" query="$query" python - <<EOF
+	types="$types" query="$query" python - <<EOF
 import spotipy
 import os
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -45,6 +45,7 @@ query = os.getenv('query')
 auth_manager = SpotifyClientCredentials(client_id=cid, client_secret=csec)
 sp = spotipy.Spotify(auth_manager=auth_manager)
 results = sp.search(q=query, limit=1, type=types)
+print(results)
 uri = results[types+'s']['items'][0]['uri']
 print(uri)
 EOF
