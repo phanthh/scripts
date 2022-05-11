@@ -8,9 +8,9 @@ case "$mode" in
 lock) swaylock ;;
 sleep) systemctl suspend ;;
 logout)
-  [ "$SESSION" = "sway" ] && swaymsg exit
-  [ "$SESSION" = "labwc" ] && pkill -f labwc
-  ;;
+	[ "$SESSION" = "sway" ] && swaymsg exit
+	[ "$SESSION" = "labwc" ] && pkill -f labwc
+	;;
 poweroff) systemctl poweroff ;;
 reboot) systemctl reboot ;;
 linux) pkexec grub-reboot 'Advanced options for Arch Linux>Arch Linux, with Linux linux' && reboot ;;
