@@ -66,12 +66,12 @@ labwc)
 	wm_daemons &
 	applications &
 	;;
-gnome)
-	de_daemons &
-	;;
-plasma)
-	de_daemons &
-	;;
+# gnome)
+# 	de_daemons &
+# 	;;
+# plasma)
+# 	de_daemons &
+# 	;;
 shell)
 	$HOME/.sh/wm_swhks & # keyboard shortcuts
 	;;
