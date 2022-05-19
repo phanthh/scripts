@@ -1,13 +1,14 @@
 #!/bin/sh
 
 pkill -f 'swaybg'
-now="$(date +%H)"
 case "$SESSION" in
 sway | labwc)
-	if [ "$now" -ge 6 -a "$now" -lt 18 ]; then
-		swaybg -i "$WALLPAPER_LIGHT" -o '*' -m fill
-	else
-		swaybg -i "$WALLPAPER_DARK" -o '*' -m fill
-	fi
+	# now="$(date +%H)"
+	# if [ "$now" -ge 6 -a "$now" -lt 18 ]; then
+	# 	swaybg -i "$WALLPAPER_LIGHT" -o '*' -m fill
+	# else
+	# 	swaybg -i "$WALLPAPER_DARK" -o '*' -m fill
+	# fi
+	swaybg -i "$WALLPAPER_DARK" -o '*' -m fill
 	;;
 esac
