@@ -13,6 +13,7 @@ de_daemons() {
 }
 
 wm_daemons() {
+	dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP &
 	wl-paste --watch cliphist store & # clipboard manager
 	$HOME/.sh/wm_wob &                # overbar
 	kanshi &                          # multi monitor manager
