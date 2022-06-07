@@ -43,7 +43,7 @@ wm_daemons() {
 }
 
 applications() {
-	util_browsesession &
+	util_browse &
 	thunderbird &
 	spotify &
 	discord &
