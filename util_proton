@@ -7,4 +7,4 @@ DRIVEC="$HOME/.cache/proton-call/Proton Experimental/pfx/drive_c/"
 	mkdir -p "$DRIVEC"
 	ln -s "$USERS" "$DRIVEC"
 }
-gamemoderun mangohud prime-run proton-call -p experimental -r "$@"
+WINEESYNC=1 WINEFSYNC=1 gamemoderun mangohud prime-run proton-call -p experimental -r "$@"
