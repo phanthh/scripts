@@ -47,6 +47,7 @@ applications() {
 	thunderbird &
 	telegram-desktop &
 	spotify &
+  slack &
 	discord &
 	echo '0' | keepassxc --pw-stdin --keyfile "$PASS_KEYFILE" "$PASS_DATABASE" &
 
