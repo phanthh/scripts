@@ -3,36 +3,37 @@
 file="$1"
 case "$1" in
 *.cpp | *.c)
-  g++ $file -o /tmp/_run && /tmp/_run
-  ;;
+	g++ $file -o /tmp/_run && /tmp/_run
+	;;
 *.rs)
-  rustc $file -o /tmp/_run && /tmp/_run
-  ;;
+	rustc $file -o /tmp/_run && /tmp/_run
+	;;
 *.js)
-  node $file
-  ;;
+	node $file
+	;;
 *.ts)
-  tsc --target esnext --strict $file --outfile /tmp/_run && node /tmp/_run
-  ;;
+	tsc --target esnext --strict $file --outfile /tmp/_run && node /tmp/_run
+	;;
 *.py)
-  python $file
-  ;;
+	python $file
+	;;
 *.asm)
-  nasm -f elf32 $file -o /tmp/_run.o && ld -m elf_i386 /tmp/_run.o -o /tmp/_run && /tmp/_run
-  ;;
+	nasm -f elf32 $file -o /tmp/_run.o && ld -m elf_i386 /tmp/_run.o -o /tmp/_run && /tmp/_run
+	;;
 *.r)
-  R $file
-  ;;
+	R $file
+	;;
 *.m)
-  octave $file
-  ;;
+	octave $file
+	;;
 *.scala)
-  scala $file
-  ;;
+	scala $file
+	;;
 *.java)
-  java $file
-  ;;
+	java $file
+	;;
 *)
-  chmod +x $file &>/dev/null && exec $file
-  ;;
+	chmod +x $file &
+	>/dev/null && exec $file
+	;;
 esac
