@@ -1,5 +1,0 @@
-#!/bin/sh
-
-[ ! -d $HOME/.cache/Temp ] && mkdir -p $HOME/.cache/Temp
-[ ! -d $HOME/.wine ] && util_winesetup
-WINEESYNC=1 gamemoderun mangohud prime-run wine "$@"

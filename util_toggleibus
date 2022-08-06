@@ -1,8 +1,0 @@
-#!/bin/sh
-
-engine=$(ibus engine)
-vn="Bamboo"
-en="xkb:us::eng"
-[ "$engine" = "$vn" ] && ibus engine $en || ibus engine $vn
-pkill -SIGUSR1 i3status-rs
-notify-send "Ibus: $(ibus engine)" --urgency=low

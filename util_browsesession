@@ -1,6 +1,0 @@
-#!/bin/sh
-
-util_browse calendar.google.com
-util_browse facebook.com &
-util_browse linkedin.com &
-util_browse inoreader.com &

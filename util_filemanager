@@ -1,3 +1,0 @@
-#!/bin/sh
-
-$(xdg-mime query default inode/directory | cut -f 1 -d '.') $* >/dev/null 2>&1 &
