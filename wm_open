@@ -1,0 +1,40 @@
+#!/bin/sh
+
+string=
+while getopts s: o; do
+	case "${o}" in
+	s)
+		string="$OPTARG"
+		;;
+	esac
+done
+shift $(($OPTIND - 1))
+
+[ -z "$string" ] && string=$1
+cmd="$*"
+
+con_id=
+get_id() {
+	con_id="$(
+		yabai -m query --windows | jq '
+    first(.[]|select(any(
+    .app;
+    values and match("'"${string}"'"; "i")))
+    .id)'
+	)"
+}
+
+get_id
+if [ -n "${con_id:-}" ]; then
+	yabai -m window --focus "$con_id"
+else
+	$cmd &
+	c=0
+	while [ -z "${con_id:-}" && $c -le 5 ]; do
+		get_id
+		sleep 0.5
+		c=$(($c + 1))
+	done
+	yabai -m window --focus "$con_id"
+fi
+killall wm_open
