@@ -3,7 +3,12 @@
 case "$SESSION" in
 sway)
 	pkill -f 'bemenu'
-	bemenu $* --bottom --fn 'NotoSans Nerd Font Bold 10' -H 23 --tb '#c0caf5' --tf '#1a1b26' --hb '#c0caf5' --hf '#1a1b26'
+	bemenu $* --fn 'NotoSans Nerd Font Bold 10' -H 23 \
+		--tb '#c0caf5' --tf '#1a1b26' \
+		--hb '#c0caf5' --hf '#1a1b26' \
+		--ff '#c0caf5' --fb '#1a1b26' \
+		--nb '#1a1b26' --nf '#c0caf5' \
+		--ab '#1a1b26' --af '#c0caf5'
 	;;
 labwc)
 	pkill -f 'wofi'
