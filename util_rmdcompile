@@ -1,3 +1,0 @@
-#!/bin/sh
-# Rscript -e "library(rmarkdown); rmarkdown::render('$1', '$2')" >/dev/null 2>&1 && echo "Done!"
-Rscript -e "library(rmarkdown); rmarkdown::render('$1', 'pdf_document')" && echo "Done!"

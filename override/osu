@@ -1,2 +1,0 @@
-#!/bin/sh
-prime-run gamemoderun /usr/bin/osu-lazer $*

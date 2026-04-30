@@ -1,6 +1,11 @@
 #!/bin/sh
 
-mode=$(echo ' lock \n sleep \n logout \n poweroff \n reboot \n linux \n linux-zen \n linux-lts \n linux-harden \n window' | menu_cmd -i -p '' | awk '{ print $2 }')
+mode=$(echo "  lock
+  sleep
+  logout
+  poweroff
+  reboot
+" | menu_cmd -i -p '' | awk '{ print $2 }')
 
 [ -z "$mode" ] && exit 1
 
@@ -13,9 +18,4 @@ logout)
 	;;
 poweroff) systemctl poweroff ;;
 reboot) systemctl reboot ;;
-linux) pkexec grub-reboot 'Advanced options for Arch Linux>Arch Linux, with Linux linux' && reboot ;;
-linux-zen) pkexec grub-reboot 'Advanced options for Arch Linux>Arch Linux, with Linux linux-zen' && reboot ;;
-linux-lts) pkexec grub-reboot 'Advanced options for Arch Linux>Arch Linux, with Linux linux-lts' && reboot ;;
-linux-harden) pkexec grub-reboot 'Advanced options for Arch Linux>Arch Linux, with Linux linux-harden' && reboot ;;
-window) pkexec grub-reboot 'Windows 11 - Encrypted Boot' && reboot ;;
 esac

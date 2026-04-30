@@ -1,3 +1,4 @@
 #!/bin/sh
 
-echo ' No \n Yes ' | menu_cmd -i -p "$1" | grep -q 'Yes' && sh -c "$2"
+echo " No
+ Yes " | menu_cmd -i -p "$1" | grep -q 'Yes' && sh -c "$2"
