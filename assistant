@@ -1,0 +1,22 @@
+#!/bin/bash
+
+SANDBOX_RW_BINDS=(~/.omp ~/.cache ~/.local ~/dev)
+AGENT_CMD="$HOME/dev/oh-my-pi/packages/coding-agent/dist/omp"
+HERE="$HOME/workspace/"
+echo "Entering sandbox for $HERE"
+bind_args=()
+for d in "${SANDBOX_RW_BINDS[@]}"; do bind_args+=(--bind "$d" "$d"); done
+bwrap \
+	--chdir "$HERE" \
+	--ro-bind / / \
+	"${bind_args[@]}" \
+	"${git_bind[@]}" \
+	--dev-bind /dev/null /dev/null \
+	--dev-bind /dev/urandom /dev/urandom \
+	--tmpfs /tmp \
+	--bind "$HERE" "$HERE" \
+	--bind "$HOME/dev" "$HERE/dev" \
+	--bind "$HOME/notes" "$HERE/notes" \
+	--setenv PS1 "sandbox$ " \
+	--setenv SEARXNG_ENDPOINT "http://localhost:8888" \
+	$AGENT_CMD "$@"
