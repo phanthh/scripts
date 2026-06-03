@@ -1,0 +1,43 @@
+#!/bin/sh
+# assistant-send — inject a prompt into the persistent oh-my-pi RPC session.
+#
+# The assistant runs as a single long-lived `omp --mode rpc` process
+# (assistant.service) whose JSON stdin is a held-open FIFO. This helper builds
+# an RPC `prompt` command and delivers it to that session. Fire-and-forget:
+# it returns as soon as the command is queued; the agent runs it asynchronously
+# inside the running session (so e.g. Telegram briefings keep working after the
+# caller exits).
+#
+# Default: deliver over the systemd-managed socket (assistant.socket).
+#   assistant-send '[telegram] Run the morning briefing'
+# --local: deliver straight to the session FIFO (used at startup, before the
+# socket is guaranteed to be listening).
+#   assistant-send --local /telegram-connect
+set -eu
+
+runtime="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+sock="${ASSISTANT_RPC_SOCK:-$runtime/assistant.sock}"
+fifo="${ASSISTANT_RPC_FIFO:-$runtime/assistant.in}"
+
+local=0
+if [ "${1:-}" = "--local" ]; then
+	local=1
+	shift
+fi
+
+if [ "$#" -lt 1 ] || [ -z "$1" ]; then
+	echo "usage: assistant-send [--local] <message>" >&2
+	exit 2
+fi
+msg="$1"
+
+# JSON-encode the message safely (quotes, brackets, unicode, ...).
+json=$(MSG="$msg" python3 -c 'import json,os; print(json.dumps({"type":"prompt","message":os.environ["MSG"]}))')
+
+if [ "$local" -eq 1 ]; then
+	[ -p "$fifo" ] || { echo "assistant-send: FIFO not found: $fifo (is assistant.service running?)" >&2; exit 1; }
+	printf '%s\n' "$json" >"$fifo"
+else
+	[ -S "$sock" ] || { echo "assistant-send: socket not found: $sock (is assistant.socket running?)" >&2; exit 1; }
+	printf '%s\n' "$json" | ncat -U --send-only "$sock"
+fi
