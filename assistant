@@ -1,10 +1,23 @@
 #!/bin/bash
 
-SANDBOX_RW_BINDS=(~/.omp ~/.cache ~/.local ~/dev ~/notes)
+SANDBOX_RW_BINDS=(~/.cache ~/.local ~/dev ~/notes)
 AGENT_CMD="$HOME/dev/oh-my-pi/packages/coding-agent/dist/omp"
-HERE="$HOME/workspace/"
-SYSTEM_PROMPT="$(cat $HERE/SOUL.md) $(cat $HERE/IDENTITY.md) $(cat $HERE/MEMORY.md)"
+HERE="$HOME/workspace"
+SYSTEM_PROMPT="$(cat $HERE/SOUL.md) $(cat $HERE/IDENTITY.md)"
 echo "Entering sandbox for $HERE"
+gpu_args=()
+if [[ "${GPU:-0}" == "1" ]]; then
+	gpu_args+=(
+		--dev-bind /dev/nvidia0 /dev/nvidia0
+		--dev-bind /dev/nvidiactl /dev/nvidiactl
+		--dev-bind /dev/nvidia-modeset /dev/nvidia-modeset
+		--dev-bind /dev/nvidia-uvm /dev/nvidia-uvm
+		--dev-bind /dev/nvidia-uvm-tools /dev/nvidia-uvm-tools
+		--dev-bind /dev/nvidia-caps /dev/nvidia-caps
+		--tmpfs /dev/shm
+		--proc /proc
+	)
+fi
 bind_args=()
 for d in "${SANDBOX_RW_BINDS[@]}"; do bind_args+=(--bind "$d" "$d"); done
 bwrap \
@@ -12,18 +25,20 @@ bwrap \
 	--ro-bind / / \
 	"${bind_args[@]}" \
 	"${git_bind[@]}" \
+	"${gpu_args[@]}" \
 	--dev-bind /dev/null /dev/null \
 	--dev-bind /dev/urandom /dev/urandom \
 	--tmpfs /tmp \
 	--tmpfs /etc/ssh/ssh_config.d \
 	--tmpfs /etc/ssh/sshd_config.d \
 	--bind "$HERE" "$HERE" \
+	--bind "/var/spool/cron/$USER" "$HERE/crontab" \
 	--bind "$HOME/dev" "$HERE/dev" \
 	--bind "$HOME/notes" "$HERE/notes" \
+	--bind "$HOME/.omp_assistant" "$HOME/.omp" \
 	--setenv PS1 "sandbox$ " \
 	--setenv SEARXNG_ENDPOINT "http://localhost:8888" \
 	$AGENT_CMD --system-prompt "$SYSTEM_PROMPT" \
-	--tools=read,bash,edit,write,grep,find,python,browser,inspect_image,task,todo_write,web_search,github \
 	--no-lsp \
 	--no-pty \
 	--no-title \

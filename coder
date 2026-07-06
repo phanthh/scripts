@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SANDBOX_RW_BINDS=(~/.omp ~/.cache ~/.local)
+SANDBOX_RW_BINDS=(~/.omp ~/.cache ~/.local ~/.config/gcloud ~/.npm)
 AGENT_CMD="$HOME/dev/oh-my-pi/packages/coding-agent/dist/omp"
 HERE="$(realpath .)"
 GIT_DIR="$(git rev-parse --git-common-dir 2>/dev/null | xargs -r realpath)"
